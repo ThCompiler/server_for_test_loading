@@ -1,0 +1,12 @@
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/CMakeFiles/http-proxy.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/tcp_server_lib/CMakeFiles/rebuild_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/tcp_server_lib/CMakeFiles/edit_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib/CMakeFiles/rebuild_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib/CMakeFiles/edit_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/request_parser_lib/CMakeFiles/rebuild_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/request_parser_lib/CMakeFiles/edit_cache.dir
+/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/request_parser_lib/CMakeFiles/request_parser_lib.dir

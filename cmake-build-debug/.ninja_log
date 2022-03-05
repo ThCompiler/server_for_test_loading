@@ -1,0 +1,23 @@
+# ninja log v5
+1	27	1646501112246158891	lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/openss_utilits.c.o	1a19c65d2c5d0de8
+3646	3694	1646502790043775912	lib/proxy_client_lib/libproxy_client_lib.a	24daa755adbc263a
+1	1007	1646502787359785979	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/tcp_sever_client.cpp.o	418494c00ae4aed
+0	1661	1646501113882152425	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/tcp_base_socket.cpp.o	fbe94610bd5bac58
+0	1877	1646501114098151571	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/parallel.cpp.o	9dab67f3d198ccc8
+1	1542	1646502787891783984	CMakeFiles/http-proxy.dir/src/main.cpp.o	a3ef189fa0388914
+2	3667	1646501115886144507	lib/request_parser_lib/CMakeFiles/request_parser_lib.dir/src/request_parser.cpp.o	cfd760636108b020
+2	1126	1646502787479785529	lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/tls_socket.cpp.o	5897a6931839bc85
+2	53	1646501170997927363	lib/request_parser_lib/librequest_parser_lib.a	56c500546050c92c
+1	941	1646502635704355020	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/epoll.cpp.o	cdd9a07851b1ea2
+2	3646	1646502789995776092	lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/proxy_client.cpp.o	34ec1dc2fec29b24
+1	969	1646502787323786114	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/tcp_utilits.cpp.o	211cd5bb72c38c41
+2	1807	1646501114026151856	lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/ssl_cert.cpp.o	8cbe605bc8b3895c
+1007	1033	1646502787387785874	lib/tcp_server_lib/libtcp_server_lib.a	87868cb94f4113e
+3694	3934	1646502790283775012	http-proxy	b3e6917c29058082
+0	1723	1646501113942152188	CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src/ssl_cert.cpp.o	8cf2e6152fa47ac2
+1	941	1646502948350663964	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/epoll.cpp.o	cdd9a07851b1ea2
+941	963	1646502948370663780	lib/tcp_server_lib/libtcp_server_lib.a	87868cb94f4113e
+963	1213	1646502948618661503	http-proxy	b3e6917c29058082
+1	1067	1646503010166113380	lib/tcp_server_lib/CMakeFiles/tcp_server_lib.dir/src/epoll.cpp.o	cdd9a07851b1ea2
+1067	1089	1646503010190113173	lib/tcp_server_lib/libtcp_server_lib.a	87868cb94f4113e
+1089	1331	1646503010430111099	http-proxy	b3e6917c29058082
