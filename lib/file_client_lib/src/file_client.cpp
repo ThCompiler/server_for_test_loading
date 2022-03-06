@@ -6,9 +6,9 @@
 static const char* GET_METHOD = "GET";
 static const char* HEAD_METHOD = "HEAD";
 
-static const char* STATUS_METHOD_NOT_ALLOWED = "HTTP/1.1 405 Method Not Allowed\r\n";
-static const char* STATUS_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n";
-static const char* STATUS_FORBIDDEN = "HTTP/1.1 403 Forbidden\r\n";
+static const char* STATUS_METHOD_NOT_ALLOWED = "HTTP/1.1 405 Method Not Allowed";
+static const char* STATUS_NOT_FOUND = "HTTP/1.1 404 Not Found";
+static const char* STATUS_FORBIDDEN = "HTTP/1.1 403 Forbidden";
 static const char* STATUS_OK = "HTTP/1.1 200 OK";
 
 static const size_t client_chank_size = 1024;
@@ -72,7 +72,9 @@ http::Request FileClient::_parse_request(std::string &data) {
     response.set_header("Connection", "close");
     response.set_header("Server", "httpd");
     std::time_t now_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    response.set_header("Date", std::ctime(&now_time));
+    auto time = std::string (std::ctime(&now_time));
+    response.set_header("Date", time.substr(0, time.size() - 1));
+    response.set_header("Content-Length", "0");
 
     if (tmp.get_method() != GET_METHOD && tmp.get_method() != HEAD_METHOD) {
         response.set_url(STATUS_METHOD_NOT_ALLOWED);

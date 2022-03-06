@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Werror -Wextra -ggdb3")
 
-set(PROJECT_NAME http-proxy)
+set(PROJECT_NAME httpd)
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SOURCE ${SOURCE_DIR}/main.cpp)
 set(LIBRARIES_DIR ${CMAKE_SOURCE_DIR}/lib)
