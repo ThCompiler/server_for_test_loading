@@ -70,21 +70,14 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 #############################################
 # Order-only phony target for http-proxy
 
-build cmake_object_order_depends_target_http-proxy: phony || cmake_object_order_depends_target_proxy_client_lib cmake_object_order_depends_target_request_parser_lib cmake_object_order_depends_target_tcp_server_lib
+build cmake_object_order_depends_target_http-proxy: phony || cmake_object_order_depends_target_file_client_lib cmake_object_order_depends_target_request_parser_lib cmake_object_order_depends_target_tcp_server_lib
 
 build CMakeFiles/http-proxy.dir/src/main.cpp.o: CXX_COMPILER__http-proxy_Debug /home/thecompiler/1/3_sem/server_for_test_loading/src/main.cpp || cmake_object_order_depends_target_http-proxy
   DEP_FILE = CMakeFiles/http-proxy.dir/src/main.cpp.o.d
   FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g -std=gnu++20
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
+  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
   OBJECT_DIR = CMakeFiles/http-proxy.dir
   OBJECT_FILE_DIR = CMakeFiles/http-proxy.dir/src
-
-build CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src/ssl_cert.cpp.o: CXX_COMPILER__http-proxy_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/src/ssl_cert.cpp || cmake_object_order_depends_target_http-proxy
-  DEP_FILE = CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src/ssl_cert.cpp.o.d
-  FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g -std=gnu++20
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
-  OBJECT_DIR = CMakeFiles/http-proxy.dir
-  OBJECT_FILE_DIR = CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src
 
 
 # =============================================================================
@@ -94,10 +87,10 @@ build CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src/ssl_cert.cpp.o: CXX_COM
 #############################################
 # Link the executable http-proxy
 
-build http-proxy: CXX_EXECUTABLE_LINKER__http-proxy_Debug CMakeFiles/http-proxy.dir/src/main.cpp.o CMakeFiles/http-proxy.dir/lib/proxy_client_lib/src/ssl_cert.cpp.o | lib/proxy_client_lib/libproxy_client_lib.a lib/tcp_server_lib/libtcp_server_lib.a /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so lib/request_parser_lib/librequest_parser_lib.a || lib/proxy_client_lib/libproxy_client_lib.a lib/request_parser_lib/librequest_parser_lib.a lib/tcp_server_lib/libtcp_server_lib.a
+build http-proxy: CXX_EXECUTABLE_LINKER__http-proxy_Debug CMakeFiles/http-proxy.dir/src/main.cpp.o | lib/file_client_lib/libfile_client_lib.a lib/tcp_server_lib/libtcp_server_lib.a /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so lib/request_parser_lib/librequest_parser_lib.a || lib/file_client_lib/libfile_client_lib.a lib/request_parser_lib/librequest_parser_lib.a lib/tcp_server_lib/libtcp_server_lib.a
   FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g
   LINK_FLAGS = -rdynamic
-  LINK_LIBRARIES = lib/proxy_client_lib/libproxy_client_lib.a  lib/tcp_server_lib/libtcp_server_lib.a  -lpthread  /usr/lib/x86_64-linux-gnu/libssl.so  /usr/lib/x86_64-linux-gnu/libcrypto.so  lib/request_parser_lib/librequest_parser_lib.a
+  LINK_LIBRARIES = lib/file_client_lib/libfile_client_lib.a  lib/tcp_server_lib/libtcp_server_lib.a  -lpthread  /usr/lib/x86_64-linux-gnu/libssl.so  /usr/lib/x86_64-linux-gnu/libcrypto.so  lib/request_parser_lib/librequest_parser_lib.a
   OBJECT_DIR = CMakeFiles/http-proxy.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -201,77 +194,63 @@ build lib/tcp_server_lib/libtcp_server_lib.a: CXX_STATIC_LIBRARY_LINKER__tcp_ser
 #############################################
 # Utility command for rebuild_cache
 
-build lib/proxy_client_lib/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib && /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/thecompiler/1/3_sem/server_for_test_loading -B/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug
+build lib/file_client_lib/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib && /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/thecompiler/1/3_sem/server_for_test_loading -B/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
-build lib/proxy_client_lib/rebuild_cache: phony lib/proxy_client_lib/CMakeFiles/rebuild_cache.util
+build lib/file_client_lib/rebuild_cache: phony lib/file_client_lib/CMakeFiles/rebuild_cache.util
 
 
 #############################################
 # Utility command for edit_cache
 
-build lib/proxy_client_lib/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib && /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+build lib/file_client_lib/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib && /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
-build lib/proxy_client_lib/edit_cache: phony lib/proxy_client_lib/CMakeFiles/edit_cache.util
+build lib/file_client_lib/edit_cache: phony lib/file_client_lib/CMakeFiles/edit_cache.util
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target proxy_client_lib
+# Object build statements for STATIC_LIBRARY target file_client_lib
 
 
 #############################################
-# Order-only phony target for proxy_client_lib
+# Order-only phony target for file_client_lib
 
-build cmake_object_order_depends_target_proxy_client_lib: phony || cmake_object_order_depends_target_request_parser_lib cmake_object_order_depends_target_tcp_server_lib
+build cmake_object_order_depends_target_file_client_lib: phony || cmake_object_order_depends_target_request_parser_lib cmake_object_order_depends_target_tcp_server_lib
 
-build lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/openss_utilits.c.o: C_COMPILER__proxy_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/src/openss_utilits.c || cmake_object_order_depends_target_proxy_client_lib
-  DEP_FILE = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/openss_utilits.c.o.d
-  FLAGS = -g
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
-  OBJECT_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
-  OBJECT_FILE_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src
-
-build lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/proxy_client.cpp.o: CXX_COMPILER__proxy_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/src/proxy_client.cpp || cmake_object_order_depends_target_proxy_client_lib
-  DEP_FILE = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/proxy_client.cpp.o.d
+build lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_client.cpp.o: CXX_COMPILER__file_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib/src/file_client.cpp || cmake_object_order_depends_target_file_client_lib
+  DEP_FILE = lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_client.cpp.o.d
   FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g -std=gnu++20
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
-  OBJECT_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
-  OBJECT_FILE_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src
+  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
+  OBJECT_DIR = lib/file_client_lib/CMakeFiles/file_client_lib.dir
+  OBJECT_FILE_DIR = lib/file_client_lib/CMakeFiles/file_client_lib.dir/src
 
-build lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/ssl_cert.cpp.o: CXX_COMPILER__proxy_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/src/ssl_cert.cpp || cmake_object_order_depends_target_proxy_client_lib
-  DEP_FILE = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/ssl_cert.cpp.o.d
+build lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_system.cpp.o: CXX_COMPILER__file_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib/src/file_system.cpp || cmake_object_order_depends_target_file_client_lib
+  DEP_FILE = lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_system.cpp.o.d
   FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g -std=gnu++20
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
-  OBJECT_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
-  OBJECT_FILE_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src
-
-build lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/tls_socket.cpp.o: CXX_COMPILER__proxy_client_lib_Debug /home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/src/tls_socket.cpp || cmake_object_order_depends_target_proxy_client_lib
-  DEP_FILE = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/tls_socket.cpp.o.d
-  FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g -std=gnu++20
-  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
-  OBJECT_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
-  OBJECT_FILE_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src
+  INCLUDES = -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib/include -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib -I/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib
+  OBJECT_DIR = lib/file_client_lib/CMakeFiles/file_client_lib.dir
+  OBJECT_FILE_DIR = lib/file_client_lib/CMakeFiles/file_client_lib.dir/src
 
 
 # =============================================================================
-# Link build statements for STATIC_LIBRARY target proxy_client_lib
+# Link build statements for STATIC_LIBRARY target file_client_lib
 
 
 #############################################
-# Link the static library lib/proxy_client_lib/libproxy_client_lib.a
+# Link the static library lib/file_client_lib/libfile_client_lib.a
 
-build lib/proxy_client_lib/libproxy_client_lib.a: CXX_STATIC_LIBRARY_LINKER__proxy_client_lib_Debug lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/openss_utilits.c.o lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/proxy_client.cpp.o lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/ssl_cert.cpp.o lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir/src/tls_socket.cpp.o || lib/request_parser_lib/librequest_parser_lib.a lib/tcp_server_lib/libtcp_server_lib.a
+build lib/file_client_lib/libfile_client_lib.a: CXX_STATIC_LIBRARY_LINKER__file_client_lib_Debug lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_client.cpp.o lib/file_client_lib/CMakeFiles/file_client_lib.dir/src/file_system.cpp.o || lib/request_parser_lib/librequest_parser_lib.a lib/tcp_server_lib/libtcp_server_lib.a
   LANGUAGE_COMPILE_FLAGS = -Wall -Wpedantic -Werror -Wextra -ggdb3 -g
-  OBJECT_DIR = lib/proxy_client_lib/CMakeFiles/proxy_client_lib.dir
+  OBJECT_DIR = lib/file_client_lib/CMakeFiles/file_client_lib.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = lib/proxy_client_lib/libproxy_client_lib.a
-  TARGET_PDB = proxy_client_lib.a.dbg
+  TARGET_FILE = lib/file_client_lib/libfile_client_lib.a
+  TARGET_PDB = file_client_lib.a.dbg
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
@@ -336,13 +315,13 @@ build lib/request_parser_lib/librequest_parser_lib.a: CXX_STATIC_LIBRARY_LINKER_
 # =============================================================================
 # Target aliases.
 
-build libproxy_client_lib.a: phony lib/proxy_client_lib/libproxy_client_lib.a
+build file_client_lib: phony lib/file_client_lib/libfile_client_lib.a
+
+build libfile_client_lib.a: phony lib/file_client_lib/libfile_client_lib.a
 
 build librequest_parser_lib.a: phony lib/request_parser_lib/librequest_parser_lib.a
 
 build libtcp_server_lib.a: phony lib/tcp_server_lib/libtcp_server_lib.a
-
-build proxy_client_lib: phony lib/proxy_client_lib/libproxy_client_lib.a
 
 build request_parser_lib: phony lib/request_parser_lib/librequest_parser_lib.a
 
@@ -356,14 +335,14 @@ build tcp_server_lib: phony lib/tcp_server_lib/libtcp_server_lib.a
 #############################################
 # Folder: /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug
 
-build all: phony http-proxy lib/tcp_server_lib/all lib/proxy_client_lib/all lib/request_parser_lib/all
+build all: phony http-proxy lib/tcp_server_lib/all lib/file_client_lib/all lib/request_parser_lib/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib
+# Folder: /home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib
 
-build lib/proxy_client_lib/all: phony lib/proxy_client_lib/libproxy_client_lib.a
+build lib/file_client_lib/all: phony lib/file_client_lib/libfile_client_lib.a
 
 # =============================================================================
 
@@ -391,14 +370,14 @@ build lib/tcp_server_lib/all: phony lib/tcp_server_lib/libtcp_server_lib.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../cmake-utilits/templates.cmake ../lib/proxy_client_lib/CMakeLists.txt ../lib/request_parser_lib/CMakeLists.txt ../lib/tcp_server_lib/CMakeLists.txt /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindOpenSSL.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageHandleStandardArgs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageMessage.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPkgConfig.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.1/CMakeCCompiler.cmake CMakeFiles/3.21.1/CMakeCXXCompiler.cmake CMakeFiles/3.21.1/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../cmake-utilits/templates.cmake ../lib/file_client_lib/CMakeLists.txt ../lib/request_parser_lib/CMakeLists.txt ../lib/tcp_server_lib/CMakeLists.txt /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindOpenSSL.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageHandleStandardArgs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageMessage.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPkgConfig.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.1/CMakeCCompiler.cmake CMakeFiles/3.21.1/CMakeCXXCompiler.cmake CMakeFiles/3.21.1/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt ../cmake-utilits/templates.cmake ../lib/proxy_client_lib/CMakeLists.txt ../lib/request_parser_lib/CMakeLists.txt ../lib/tcp_server_lib/CMakeLists.txt /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindOpenSSL.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageHandleStandardArgs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageMessage.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPkgConfig.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.1/CMakeCCompiler.cmake CMakeFiles/3.21.1/CMakeCXXCompiler.cmake CMakeFiles/3.21.1/CMakeSystem.cmake: phony
+build ../CMakeLists.txt ../cmake-utilits/templates.cmake ../lib/file_client_lib/CMakeLists.txt ../lib/request_parser_lib/CMakeLists.txt ../lib/tcp_server_lib/CMakeLists.txt /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Compiler/GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindOpenSSL.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageHandleStandardArgs.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPackageMessage.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/FindPkgConfig.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/Linux.cmake /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.1/CMakeCCompiler.cmake CMakeFiles/3.21.1/CMakeCXXCompiler.cmake CMakeFiles/3.21.1/CMakeSystem.cmake: phony
 
 
 #############################################

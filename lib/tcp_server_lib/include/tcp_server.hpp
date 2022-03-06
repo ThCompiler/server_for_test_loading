@@ -38,9 +38,9 @@ public:
         close                   = 5
     };
 
-    typedef std::function<void(std::unique_ptr<IServerClient> &)>   _con_handler_function_t;
+    typedef std::function<void(const std::unique_ptr<IServerClient> &)>   _con_handler_function_t;
 
-    static constexpr auto _default_connsection_handler  = [](std::unique_ptr<IServerClient> &) {};
+    static constexpr auto _default_connsection_handler  = [](const std::unique_ptr<IServerClient> &) {};
 
   public:
     explicit TcpServer(uint16_t port,
@@ -85,7 +85,7 @@ public:
 
     bool _enable_keep_alive(socket_t socket);
 
-    void _accept_loop(std::shared_ptr<ISocket> server);
+    void _accept_loop(const std::unique_ptr<ISocket> &server);
 
     void _waiting_recv_loop();
 };

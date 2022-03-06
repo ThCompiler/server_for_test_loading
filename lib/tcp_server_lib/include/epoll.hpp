@@ -12,15 +12,17 @@ class Epoll {
   public:
     struct Client {
       public:
-        Client() = default;
+        Client();
 
-        explicit Client(std::shared_ptr<IServerClient> client);
+        explicit Client(std::shared_ptr<IServerClient>&& client);
 
-        void lock();
+        void lock() const;
 
-        std::shared_ptr<IServerClient>& get_client();
+        [[nodiscard]] bool try_lock() const;
 
-        void unlock();
+        [[nodiscard]] const std::shared_ptr<IServerClient>& get_client() const;
+
+        void unlock() const;
 
         ~Client() = default;
 
@@ -47,7 +49,7 @@ class Epoll {
 
     void stop();
 
-    bool add_client(std::unique_ptr<IServerClient> client);
+    bool add_client(std::unique_ptr<IServerClient>&& client);
 
     std::vector<epoll_event_t> wait();
 
@@ -57,12 +59,15 @@ class Epoll {
 
     void delete_all();
 
+    [[nodiscard]] const std::unique_ptr<ISocket>& get_server() const;
+
   private:
 
     bool _delete_ctl(socket_t socket) const;
 
     std::map<size_t, Client> _clients;
 
+    std::mutex                  _mutex;
     epoll_fd_t                  _epoll_fd;
     std::unique_ptr<ISocket>    _serv_socket;
 };

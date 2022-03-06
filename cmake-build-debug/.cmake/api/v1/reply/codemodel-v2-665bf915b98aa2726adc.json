@@ -1,0 +1,174 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1X"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "lib/tcp_server_lib",
+					"jsonFile" : "directory-lib.tcp_server_lib-Debug-2b475b0430bbbf5227b7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1x"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "lib/tcp_server_lib",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "lib/file_client_lib",
+					"jsonFile" : "directory-lib.file_client_lib-Debug-c4ff33f8de449a151f93.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1x"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "lib/file_client_lib",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "lib/request_parser_lib",
+					"jsonFile" : "directory-lib.request_parser_lib-Debug-7fd9dd019f2f9101a62b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1x"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "lib/request_parser_lib",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "http-proxy",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "tcp_server_lib",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "file_client_lib",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "request_parser_lib",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "file_client_lib::@c3ff45b67f8bcd0ad947",
+					"jsonFile" : "target-file_client_lib-Debug-9e087935565952e712af.json",
+					"name" : "file_client_lib",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "http-proxy::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-http-proxy-Debug-c57448ecb62adf9094d7.json",
+					"name" : "http-proxy",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "request_parser_lib::@dd0b3b096982fce36fcd",
+					"jsonFile" : "target-request_parser_lib-Debug-dc10f6e0882eb0da4d09.json",
+					"name" : "request_parser_lib",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "tcp_server_lib::@7ca3d00831b2fcb7f8f1",
+					"jsonFile" : "target-tcp_server_lib-Debug-c71e64d0d86a88ea1b65.json",
+					"name" : "tcp_server_lib",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug",
+		"source" : "/home/thecompiler/1/3_sem/server_for_test_loading"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

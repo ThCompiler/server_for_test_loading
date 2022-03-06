@@ -22,7 +22,7 @@ class BaseSocket : public ISocket {
 
     status init(uint32_t host, uint16_t port, uint16_t type);
 
-    status accept(const std::shared_ptr<ISocket>& server_socket);
+    status accept(const std::unique_ptr<ISocket>& server_socket);
 
     ~BaseSocket() override;
 

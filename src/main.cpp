@@ -1,5 +1,5 @@
 #include "tcp_server_lib.hpp"
-#include "proxy_client_lib.hpp"
+#include "file_client_lib.hpp"
 
 #include <iostream>
 #include <getopt.h>
@@ -7,7 +7,7 @@
 using namespace bstcp;
 
 //Parse ip to std::string
-std::string getHostStr(std::unique_ptr<IServerClient> &client) {
+std::string getHostStr(const std::unique_ptr<IServerClient> &client) {
     uint32_t ip = client->get_host();
     return std::string() + std::to_string(int(reinterpret_cast<unsigned char *>(&ip)[0])) + '.' +
            std::to_string(int(reinterpret_cast<unsigned char *>(&ip)[1])) + '.' +
@@ -19,8 +19,7 @@ std::string getHostStr(std::unique_ptr<IServerClient> &client) {
 
 
 int main(int argc, char *argv[]) {
-    int opt;
-    proxy::SSLCert::init("certs", "certs/cert.key");
+    int opt = 0;
 
     int http_port = 8081;
     while ((opt = getopt(argc, argv, "p:")) != -1) {
@@ -30,14 +29,14 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        TcpServer<proxy::TcpSocket, proxy::ProxyClient> server(http_port,
+        BaseTcpServer<file::FileClient> server(http_port,
                          {1, 1, 1}, // Keep alive{idle:1s, interval: 1s, pk_count: 1}
 
-                         [](std::unique_ptr<IServerClient> &client) { // Connect handler
+                         [](const std::unique_ptr<IServerClient> &client) { // Connect handler
                              std::cout << "Client " << getHostStr(client) << " connected\n";
                          },
 
-                         [](std::unique_ptr<IServerClient> &client) { // Disconnect handler
+                         [](const std::unique_ptr<IServerClient> &client) { // Disconnect handler
                              std::cout << "Client " << getHostStr(client) << " disconnected\n";
                          },
 
@@ -45,7 +44,7 @@ int main(int argc, char *argv[]) {
         );
 
         //Start server
-        if (server.start() == TcpServer<proxy::TcpSocket, proxy::ProxyClient>::ServerStatus::up) {
+        if (server.start() == BaseTcpServer<file::FileClient>::ServerStatus::up) {
             std::cout << "Server listen on port: " << server.get_port() << std::endl
                       << "Server handling thread pool size: " << server.get_thread_pool().get_count_threads() << std::endl;
             server.joinLoop();
@@ -60,5 +59,4 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    proxy::SSLCert::clear_cert_dir();
 }

@@ -78,7 +78,7 @@ TcpServer<Socket, T>::start() {
 
 SOCKET_TEMPLATE
 void TcpServer<Socket, T>::stop() {
-    _thread_pool.wait();
+    _thread_pool.stop();
     _status = ServerStatus::close;
 
     _epoll.stop();
@@ -106,9 +106,7 @@ bool TcpServer<Socket, T>::connect_to(uint32_t host, uint16_t port,
     }
 
     connect_hndl(client_socket);
-    _epoll_mutex.lock();
     _epoll.add_client(uniq_ptr<T>(std::move(client_socket)));
-    _epoll_mutex.unlock();
     return true;
 }
 
@@ -118,63 +116,62 @@ void TcpServer<Socket, T>::disconnect_all() {
 }
 
 SOCKET_TEMPLATE
-void TcpServer<Socket, T>::_accept_loop(std::shared_ptr<ISocket> server) {
+void TcpServer<Socket, T>::_accept_loop(const std::unique_ptr<ISocket>& server) {
     Socket client_socket;
     if (client_socket.accept(server) == status::connected
         && _status == ServerStatus::up) {
 
         if (_enable_keep_alive(client_socket.get_socket())) {
-            uniq_ptr<T> client(new T(std::move(client_socket)));
-            _connect_hndl(reinterpret_cast<std::unique_ptr<IServerClient> &>(client));
-            _epoll_mutex.lock();
-            _epoll.add_client(uniq_ptr<T>(std::move(client)));
-            _epoll_mutex.unlock();
+            uniq_ptr<IServerClient> client(new T(std::move(client_socket)));
+            _connect_hndl(client);
+            _epoll.add_client(std::move(client));
         }
     }
 }
 
 SOCKET_TEMPLATE
 void TcpServer<Socket, T>::_waiting_recv_loop() {
-    {
-        std::lock_guard lock(_epoll_mutex);
-        auto res = _epoll.wait();
-        for (auto client : res) {
-            switch (client.event) {
-                case Epoll::err:
-                case Epoll::event_t::close:
-                    _epoll.delete_client(client.client.get_client());
-                    _thread_pool.add([this, &client] {
-                        client.client.lock();
-                        _disconnect_hndl(
-                                reinterpret_cast<std::unique_ptr<IServerClient> &>(client.client.get_client()));
-                        client.client.get_client()->disconnect();
-                        client.client.unlock();
+    auto res = _epoll.wait();
+    for (const auto& event : res) {
+        auto& client = event.client;
+        switch (event.event) {
+            case Epoll::err:
+            case Epoll::event_t::close:
+                _epoll.delete_client(client.get_client());
+                _thread_pool.add([this, client] {
+                    client.lock();
+                    _disconnect_hndl(
+                            reinterpret_cast<const std::unique_ptr<IServerClient> &>(client.get_client()));
+                    client.get_client()->disconnect();
+                    client.unlock();
+                });
+                break;
+            case Epoll::need_accept:
+                printf("d");
+                _thread_pool.add([this] {
+                    _accept_loop(_epoll.get_server());
+                });
+                break;
+            case Epoll::can_read:
+                _thread_pool.add(
+                    [this, client] {
+                        if (!client.try_lock()) {
+                            return;
+                        }
+                        if (client.get_client()->get_status() !=
+                            SocketStatus::disconnected) {
+                            client.get_client()->handle_request();
+                        }
+                        client.unlock();
                     });
-                    break;
-                case Epoll::can_read:
-                    _thread_pool.add([this, &client] {
-                        client.client.lock();
-                        _accept_loop(client.client.get_client());
-                        client.client.unlock();
-                    });
-                    break;
-                case Epoll::need_accept:
-                    _thread_pool.add(
-                        [this, &client] {
-                            client.client.lock();
-                            if (client.client.get_client()->get_status() !=
-                                SocketStatus::disconnected) {
-                                client.client.get_client()->handle_request();
-                            }
-                            client.client.unlock();
-                        });
-                    break;
-            }
+                break;
         }
     }
 
     if (_status == ServerStatus::up) {
-        _thread_pool.add([this]() { _waiting_recv_loop(); });
+        _thread_pool.add([this]() {
+            _waiting_recv_loop();
+        });
     }
 }
 

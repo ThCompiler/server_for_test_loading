@@ -9,7 +9,7 @@ namespace http {
 class Request {
   public:
 
-    Request() = default;
+    Request();
     explicit Request(const std::string &request);
 
     bool parse(const std::string &request);

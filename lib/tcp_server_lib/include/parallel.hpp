@@ -3,7 +3,7 @@
 #include <thread>
 #include <condition_variable>
 #include <queue>
-#include <vector>
+#include <list>
 #include <functional>
 
 namespace prll {
@@ -15,27 +15,24 @@ class Parallel {
 
     template<typename Callable, typename... Args>
     void add(Callable &&f, Args &&... args) {
-        auto task = std::bind(std::forward<Callable>(f),
-                              std::forward<Args>(args)...);
-
         if (_max_threads == 0) {
-            task();
+            f(args...);
         } else {
-            std::unique_lock<std::mutex> lck(_task_mutex);
+            {
+                std::lock_guard<std::mutex> lck(_task_mutex);
 
-            if (_exit) {
-                return;
+                if (_exit) {
+                    return;
+                }
+
+                _tasks.push(std::move([f, args...] {
+                    f(args...);
+                }));
             }
 
-            _tasks.push(task);
-
-            lck.unlock();
-            _in_thread.notify_all();
-            _in_balance.notify_one();
+            _wait.notify_one();;
         }
     }
-
-    void wait();
 
     void join();
 
@@ -53,17 +50,14 @@ class Parallel {
       public:
         Thread() = delete;
 
-        Thread(std::mutex &thread_mutex,
-               std::queue<std::function<void()>> &task,
+        Thread(std::function<void()> task,
                std::condition_variable &threads);
 
         Thread(Thread &&) noexcept = delete;
 
         void join();
 
-        void wait();
-
-        void force_join();
+        [[nodiscard]] bool is_finished() const;
 
         ~Thread();
 
@@ -71,28 +65,21 @@ class Parallel {
 
         void _main();
 
-        std::mutex &_task_mutex;
-        std::condition_variable &_in_thread;
-        std::queue<std::function<void(void)>> &_tasks;
-
-        bool _end;
-        std::thread _main_thread;
-        std::condition_variable _wait;
-        std::atomic<long> _have_proccess;
+        std::thread                 _main_thread;
+        std::atomic<long>           _have_proccess;
+        std::condition_variable&    _wait;
+        std::function<void(void)>   _task;
     };
 
-    void _balance();
+    void _supervisor();
 
-    std::mutex _task_mutex;
-    std::condition_variable _in_thread;
-    std::queue<std::function<void(void)>> _tasks;
+    bool                                    _exit = false;
+    size_t                                  _max_threads;
+    std::mutex                              _task_mutex;
+    std::condition_variable                 _wait;
+    std::list<std::unique_ptr<Thread>>      _threads;
+    std::queue<std::function<void(void)>>   _tasks;
 
-    std::mutex _main_mutex;
-    std::condition_variable _in_balance;
-    std::vector<std::unique_ptr<Thread>> _threads;
     std::thread _main_thread;
-
-    bool _exit;
-    size_t _max_threads;
 };
 }

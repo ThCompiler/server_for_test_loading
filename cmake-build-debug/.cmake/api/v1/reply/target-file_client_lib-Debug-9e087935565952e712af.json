@@ -1,0 +1,165 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/file_client_lib/libfile_client_lib.a"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"connect_lib",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"cmake-utilits/templates.cmake",
+			"lib/file_client_lib/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 17,
+				"parent" : 1
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-Wall -Wpedantic -Werror -Wextra -ggdb3 -g"
+				},
+				{
+					"fragment" : "-std=gnu++20"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/thecompiler/1/3_sem/server_for_test_loading/lib/tcp_server_lib"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/thecompiler/1/3_sem/server_for_test_loading/lib/request_parser_lib"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				2,
+				3
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "tcp_server_lib::@7ca3d00831b2fcb7f8f1"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "request_parser_lib::@dd0b3b096982fce36fcd"
+		}
+	],
+	"id" : "file_client_lib::@c3ff45b67f8bcd0ad947",
+	"name" : "file_client_lib",
+	"nameOnDisk" : "libfile_client_lib.a",
+	"paths" : 
+	{
+		"build" : "lib/file_client_lib",
+		"source" : "lib/file_client_lib"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				2,
+				3
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"path" : "lib/file_client_lib/include/file_client.hpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "lib/file_client_lib/include/file_system.hpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "lib/file_client_lib/src/file_client.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "lib/file_client_lib/src/file_system.cpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

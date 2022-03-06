@@ -60,7 +60,7 @@ status BaseSocket::_init_as_client(uint32_t host, uint16_t port, uint16_t type) 
     return _status = status::connected;
 }
 
-status BaseSocket::accept(const std::shared_ptr<ISocket>& server_socket) {
+status BaseSocket::accept(const std::unique_ptr<ISocket>& server_socket) {
     if (_status == status::connected) {
         disconnect();
     }

@@ -16,6 +16,7 @@ bool Epoll::delete_client(const std::shared_ptr<IServerClient>& client) {
     if (_clients.find(socket_fd) == _clients.end()) {
         return false;
     }
+    std::lock_guard lock(_mutex);
     _clients.erase(socket_fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, client->get_socket(), nullptr) == -1) {
         return false;
@@ -36,6 +37,7 @@ std::vector<Epoll::epoll_event_t> Epoll::wait() {
     }
 
     std::vector<struct epoll_event> events(max_events);
+    std::lock_guard lock(_mutex);
     auto number = epoll_wait(_epoll_fd, events.data(), max_events, timeout);
     std::vector<epoll_event_t> selected;
 
@@ -50,18 +52,20 @@ std::vector<Epoll::epoll_event_t> Epoll::wait() {
             continue;
         }
 
-        epollEvent.client = _clients[events[i].data.fd];
-        if (events[i].events & EPOLLHUP) {
+        if (events[i].events & EPOLLHUP || events[i].events & EPOLLRDHUP) {
             epollEvent.event = event_t::close;
         } else if (events[i].events & EPOLLIN) {
-            if(events[i].data.fd == _serv_socket->get_socket()) {
-                epollEvent.event = event_t::need_accept;
-            } else {
-                epollEvent.event = event_t::can_read;
-            }
-        } else {
+             if(events[i].data.fd == _serv_socket->get_socket()) {
+                 epollEvent.event = event_t::need_accept;
+                 selected.push_back(epollEvent);
+                 continue;
+             } else {
+                 epollEvent.event = event_t::can_read;
+             }
+         } else {
             epollEvent.event = event_t::err;
         }
+        epollEvent.client = _clients[events[i].data.fd];
 
         selected.push_back(epollEvent);
     }
@@ -69,17 +73,20 @@ std::vector<Epoll::epoll_event_t> Epoll::wait() {
     return selected;
 }
 
-bool Epoll::add_client(std::unique_ptr<IServerClient> client) {
+bool Epoll::add_client(std::unique_ptr<IServerClient>&& client) {
     struct epoll_event ev{};
     auto socket_fd = client->get_socket();
     ev.data.fd = socket_fd;
-    ev.events = EPOLLIN | EPOLLET;
-
-    if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, client->get_socket(), &ev) == -1) {
-        return false;
+    ev.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
+    {
+        std::lock_guard lock(_mutex);
+        if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, client->get_socket(), &ev) ==
+            -1) {
+            return false;
+        }
+        _clients[socket_fd] = Client(
+                std::shared_ptr<IServerClient>(client.release()));
     }
-
-    _clients[socket_fd] = Client(std::shared_ptr<IServerClient>(client.release()));
     return true;
 }
 
@@ -96,6 +103,7 @@ bool Epoll::add_server_socket(std::unique_ptr<ISocket> server) {
 }
 
 void Epoll::stop() {
+    std::lock_guard lock(_mutex);
     _serv_socket->disconnect();
     _serv_socket = nullptr;
 
@@ -115,6 +123,7 @@ std::vector<Epoll::Client> Epoll::get_clients() {
 }
 
 void Epoll::delete_all() {
+    std::lock_guard lock(_mutex);
     for(auto& client : _clients) {
         _delete_ctl(client.second.get_client()->get_socket());
     }
@@ -122,19 +131,32 @@ void Epoll::delete_all() {
     _clients.clear();
 }
 
-Epoll::Client::Client(std::shared_ptr<IServerClient> client)
-    : _client(std::move(client)) {}
+Epoll::Client::Client(std::shared_ptr<IServerClient>&& client)
+    : _access_mtx(new std::mutex())
+    , _client(std::move(client)){}
 
-void Epoll::Client::lock() {
+bool Epoll::Client::try_lock() const {
+    return _access_mtx->try_lock();
+}
+
+void Epoll::Client::lock() const {
     _access_mtx->lock();
 }
 
-std::shared_ptr<IServerClient>& Epoll::Client::get_client() {
+const std::shared_ptr<IServerClient>& Epoll::Client::get_client() const{
     return _client;
 }
 
-void Epoll::Client::unlock() {
+void Epoll::Client::unlock() const {
     _access_mtx->unlock();
+}
+
+Epoll::Client::Client()
+    : _access_mtx(new std::mutex())
+    , _client(){}
+
+const std::unique_ptr<ISocket> &Epoll::get_server() const {
+    return _serv_socket;
 }
 
 }

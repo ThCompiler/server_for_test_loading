@@ -58,19 +58,9 @@ rule CXX_STATIC_LIBRARY_LINKER__tcp_server_lib_Debug
 
 
 #############################################
-# Rule for compiling C files.
-
-rule C_COMPILER__proxy_client_lib_Debug
-  depfile = $DEP_FILE
-  deps = gcc
-  command = /usr/bin/cc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
-  description = Building C object $out
-
-
-#############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__proxy_client_lib_Debug
+rule CXX_COMPILER__file_client_lib_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = /usr/bin/c++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -80,7 +70,7 @@ rule CXX_COMPILER__proxy_client_lib_Debug
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__proxy_client_lib_Debug
+rule CXX_STATIC_LIBRARY_LINKER__file_client_lib_Debug
   command = $PRE_LINK && /home/thecompiler/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT

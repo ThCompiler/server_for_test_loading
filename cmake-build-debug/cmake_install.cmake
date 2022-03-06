@@ -45,7 +45,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/tcp_server_lib/cmake_install.cmake")
-  include("/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib/cmake_install.cmake")
+  include("/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib/cmake_install.cmake")
   include("/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/request_parser_lib/cmake_install.cmake")
 
 endif()

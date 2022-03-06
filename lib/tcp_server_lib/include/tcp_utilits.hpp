@@ -91,7 +91,7 @@ class ISocket : public ISendRecvable, public IDisconnectable {
   public:
     ~ISocket() override = default;
 
-    virtual status accept(const std::shared_ptr<ISocket>& server_socket) = 0;
+    virtual status accept(const std::unique_ptr<ISocket>& server_socket) = 0;
 
     [[nodiscard]] virtual status get_status() const = 0;
 

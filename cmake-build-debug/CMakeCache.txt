@@ -219,6 +219,18 @@ OPENSSL_SSL_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libssl.so
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 
 //Value Computed by CMake
+file_client_lib_BINARY_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib
+
+//Value Computed by CMake
+file_client_lib_IS_TOP_LEVEL:STATIC=OFF
+
+//Dependencies for the target
+file_client_lib_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;general;tcp_server_lib;general;request_parser_lib;general;pthread;
+
+//Value Computed by CMake
+file_client_lib_SOURCE_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib
+
+//Value Computed by CMake
 http-proxy_BINARY_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug
 
 //Value Computed by CMake
@@ -234,7 +246,7 @@ pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
 pkgcfg_lib__OPENSSL_ssl:FILEPATH=/usr/lib/x86_64-linux-gnu/libssl.so
 
 //Value Computed by CMake
-proxy_client_lib_BINARY_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/proxy_client_lib
+proxy_client_lib_BINARY_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/file_client_lib
 
 //Value Computed by CMake
 proxy_client_lib_IS_TOP_LEVEL:STATIC=OFF
@@ -243,7 +255,7 @@ proxy_client_lib_IS_TOP_LEVEL:STATIC=OFF
 proxy_client_lib_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;general;tcp_server_lib;general;request_parser_lib;general;pthread;
 
 //Value Computed by CMake
-proxy_client_lib_SOURCE_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/lib/proxy_client_lib
+proxy_client_lib_SOURCE_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/lib/file_client_lib
 
 //Value Computed by CMake
 request_parser_lib_BINARY_DIR:STATIC=/home/thecompiler/1/3_sem/server_for_test_loading/cmake-build-debug/lib/request_parser_lib
