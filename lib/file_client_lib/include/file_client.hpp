@@ -4,7 +4,6 @@
 
 #include "tcp_server_lib.hpp"
 #include "file_system.hpp"
-#include "request_parser_lib.hpp"
 
 namespace file {
 
@@ -60,7 +59,7 @@ struct FileClient : public bstcp::IServerClient {
 
     status accept(const std::unique_ptr<ISocket>& server_socket) override;
 
-    http::Request _parse_request(std::string &data);
+    std::string _parse_request(std::string &data);
 
     BaseSocket _socket;
 

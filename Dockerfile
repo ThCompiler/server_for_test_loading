@@ -16,12 +16,14 @@ FROM gcc:latest
 
 WORKDIR /app
 
-EXPOSE 8080
-
 ARG PORT
 
 ENV USE_PORT=$PORT
 
-COPY --from=build /app/build/http .
+EXPOSE $PORT
 
-CMD ./http -p $USE_PORT
+COPY /httptest /httptest
+
+COPY --from=build /app/build/httpd .
+
+CMD ./httpd -p $USE_PORT

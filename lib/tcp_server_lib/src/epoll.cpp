@@ -5,7 +5,7 @@
 
 namespace bstcp {
 
-const size_t max_events = 10;
+const size_t max_events = 50;
 const size_t timeout    = 1000;
 
 Epoll::Epoll()
@@ -19,6 +19,18 @@ bool Epoll::delete_client(const std::shared_ptr<IServerClient>& client) {
     std::lock_guard lock(_mutex);
     _clients.erase(socket_fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, client->get_socket(), nullptr) == -1) {
+        return false;
+    }
+    return true;
+}
+
+bool Epoll::delete_client(socket_t socket) {
+    if (_clients.find(socket) == _clients.end()) {
+        return false;
+    }
+    std::lock_guard lock(_mutex);
+    _clients.erase(socket);
+    if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, socket, nullptr) == -1) {
         return false;
     }
     return true;

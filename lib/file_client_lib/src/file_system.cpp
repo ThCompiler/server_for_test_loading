@@ -52,7 +52,7 @@ requested_file_t Filesystem::get_file(const std::string& path_) const {
         if (!allowed_file) {
             return requested_file_t{"", file_status::forbidden};
         }
-        return requested_file_t{cur_path.append("/index.html"), file_status::correct};
+        return requested_file_t{cur_path.string()  + "/index.html", file_status::correct};
     }
     return requested_file_t{cur_path, file_status::correct};
 }

@@ -11,6 +11,42 @@ static const char* STATUS_NOT_FOUND = "HTTP/1.1 404 Not Found";
 static const char* STATUS_FORBIDDEN = "HTTP/1.1 403 Forbidden";
 static const char* STATUS_OK = "HTTP/1.1 200 OK";
 
+static const char * divider = "\r\n";
+
+std::string decode_url(const std::string &url) {
+    std::string decoded_url;
+    for (size_t i = 0; i < url.size(); i++) {
+        if (url[i] == '%') {
+            decoded_url += static_cast<char>(
+                    strtoll(url.substr(i + 1, 2).c_str(), nullptr, 16)
+            );
+            i = i + 2;
+        } else {
+            decoded_url += url[i];
+        }
+    }
+    return decoded_url;
+}
+
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+                                    std::not1(std::ptr_fun<int, int>(std::isspace))));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline std::string trim(std::string s) {
+    ltrim(s);
+    rtrim(s);
+    return s;
+}
+
 static const size_t client_chank_size = 1024;
 
 using namespace file;
@@ -23,39 +59,25 @@ static std::string read_from_socket(bstcp::ISocket &socket, size_t chank_size) {
         return "";
     }
     std::string res;
-
-    while (status) {
-        res.insert(
-                res.end(),
-                std::make_move_iterator(buffer.begin()),
-                std::make_move_iterator(buffer.end())
-        );
-        auto end = res.find('\0');
-        if (end != std::string::npos) {
-            res = res.substr(0, end);
-        }
-
-        if(!socket.is_allow_to_read(1000)) {
-            break;
-        }
-
-        buffer = tcp_data_t(chank_size);
-        status = socket.recv_from(buffer.data(), (int)chank_size);
+    res.insert(
+            res.end(),
+            std::make_move_iterator(buffer.begin()),
+            std::make_move_iterator(buffer.end())
+    );
+    auto end = res.find('\0');
+    if (end != std::string::npos) {
+        res = res.substr(0, end);
     }
 
     return res;
 }
 
-static bool send_to_socket(bstcp::ISocket &socket, const std::string& data, size_t chank_size) {
-    bool res = true;
-    for (size_t i = 0; (i < data.size()) && res; i += chank_size) {
-        res = socket.send_to(data.data() + i, (int)std::min(chank_size, data.size() - i));
-    }
-    return res;
+static bool send_to_socket(bstcp::ISocket &socket, const std::string& data) {
+    return socket.send_to(data.data(), (int)data.size());;
 }
 
 std::string read_file(const fs::path& path) {
-    std::ifstream file(path);
+    std::ifstream file(path,std::ios::in | std::ios::binary);
     std::stringstream fl;
     if (file.is_open()) {
         fl << file.rdbuf();
@@ -65,52 +87,63 @@ std::string read_file(const fs::path& path) {
     return fl.str();
 }
 
-http::Request FileClient::_parse_request(std::string &data) {
-    http::Request tmp(data);
+std::string FileClient::_parse_request(std::string &data) {
+    std::string response;
 
-    http::Request response;
-    response.set_header("Connection", "close");
-    response.set_header("Server", "httpd");
+    auto end = data.find(divider);
+    auto request = data.substr(0, end);
+
+    end = request.find(' ');
+    auto method = trim(request.substr(0, end));
+    auto next_end = request.find('?', end + 1);
+    if (next_end == std::string::npos) {
+        next_end = request.find(' ', end + 1);
+    }
+
+    auto url = decode_url(trim(request.substr(end + 1 , next_end - 1 - end)));
+
     std::time_t now_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     auto time = std::string (std::ctime(&now_time));
-    response.set_header("Date", time.substr(0, time.size() - 1));
-    response.set_header("Content-Length", "0");
 
-    if (tmp.get_method() != GET_METHOD && tmp.get_method() != HEAD_METHOD) {
-        response.set_url(STATUS_METHOD_NOT_ALLOWED);
+    std::string headers = (std::string)"Connection: close" + divider;
+    headers += (std::string)"Server: httpd" + divider;
+    headers += (std::string)"Date: " + time.substr(0, time.size() - 1) + divider;
+
+    if (method != GET_METHOD && method != HEAD_METHOD) {
+        response += (std::string)STATUS_METHOD_NOT_ALLOWED + divider + headers + divider;
         return response;
     }
 
-    auto res = _files.get_file(tmp.get_url());
+    auto res = _files.get_file(url);
 
     if (res.status == file_status::not_found) {
-        response.set_url(STATUS_NOT_FOUND);
+        response += (std::string)STATUS_NOT_FOUND + divider + headers + divider;
         return response;
     }
 
     if (res.status == file_status::forbidden) {
-        response.set_url(STATUS_FORBIDDEN);
+        response += (std::string)STATUS_FORBIDDEN + divider + headers + divider;
         return response;
     }
 
     auto body = read_file(res.path);
     if (body.empty()) {
-        response.set_url(STATUS_NOT_FOUND);
+        response += (std::string)STATUS_NOT_FOUND + divider + headers + divider;
         return response;
     }
 
     auto content_type = Filesystem::encode_file_type(res.path.extension());
     if (content_type.empty()) {
-        response.set_url(STATUS_FORBIDDEN);
+        response += (std::string)STATUS_FORBIDDEN + divider + headers + divider;
         return response;
     }
 
-    response.set_url(STATUS_OK);
-    response.set_header("Content-Type", content_type);
-    response.set_header("Content-Length", std::to_string(body.size()));
+    headers += "Content-Type: " + content_type + divider;
+    headers += "Content-Length: " + std::to_string(body.size()) + divider;
 
-    if (tmp.get_method() == GET_METHOD) {
-        response.set_body(body);
+    response += (std::string)STATUS_OK + divider + headers + divider;
+    if (method == GET_METHOD) {
+        response += body;
     }
 
     return response;
@@ -123,12 +156,11 @@ void FileClient::handle_request() {
         return;
     }
 
-    std::cout << "Client " << " send data [ " << data.size()
-              << " bytes ]: \n" << (char *) data.data() << '\n';
+   /* std::cout << "Client " << " send data [ " << data.size()
+              << " bytes ]: \n" << (char *) data.data() << '\n';*/
     auto res = _parse_request(data);
 
-    auto tmp = res.string();
-    send_to_socket(*this, tmp, client_chank_size);
+    send_to_socket(*this, res);
 }
 
 uint32_t FileClient::get_host() const {

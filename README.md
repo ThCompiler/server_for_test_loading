@@ -2,23 +2,11 @@
 
 ## Запуск тестов
 
-### Настройка для https
-
-Для настройки https требуется сгенерировать корневой сертификат командой, вызванной в корне проекта
-```bash
-make init-ca
-```
-
-Далее следующими командами для ОС **Linux** установить его
-```bash
-sudo mkdir /usr/local/share/ca-certificates/extra
-sudo cp ./ca/ca.crt /usr/local/share/ca-certificates/extra/ca.crt
-sudo update-ca-certificates
-```
-
 ### Запуск
 
-Для запуска требуется выполнить следующие команды в корне проекта
+#### Сервер
+
+Для запуска сервера требуется выполнить следующие команды в корне проекта
 ```bash
 make build-docker
 make docker-run
@@ -30,202 +18,143 @@ make docker-stop
 make docker-free
 ```
 
-Для запуска с портом отличным от `8080` требуется указать параметр `PORT` при выполнении команд запуска
+Для запуска с портом отличным от `8081` требуется указать параметр `PORT` при выполнении команд запуска
 ```bash
-make build-docker PORT=8081
-make docker-run PORT=8081
+make build-docker PORT=8082
+make docker-run PORT=8082
 ```
 
+
+#### nginx
+
+Для запуска nginx требуется выполнить следующие команды в корне проекта
+```bash
+make build-docker-nginx
+make docker-run-nginx
+```
+
+Для остановки требуется следующие команды
+```bash
+make docker-stop-nginx
+make docker-free
+```
+
+#### Функциональное тестирование
+
+Для запуска функционального теста
+```bash
+make run-func-test
+```
+
+#### Нагрузочное тестирование
+
+Для запуска нагрузочного теста nginx
+```bash
+make run-nginx-benchmark
+```
+
+Для запуска нагрузочного теста сервера
+```bash
+make run-httpd-benchmark
+```
 
 ## Результаты тестов
-Выполняем **http** запрос с помощью `curl` через прокси.
+
+### Функциональное тестирование
+
 ```text
-curl -vvv http://vk.com -x http://localhost:8081     
+python3 ./httptest.py  
 ```
-Ответ:
+Результат:
 ```bash
-*   Trying 127.0.0.1:8081...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 8081 (#0)
-> GET http://vk.com/ HTTP/1.1
-> Host: vk.com
-> User-Agent: curl/7.68.0
-> Accept: */*
-> Proxy-Connection: Keep-Alive
-> 
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 301 Moved Permanently
-< Server: kittenx
-< Date: Mon, 14 Feb 2022 15:01:59 GMT
-< Content-Type: text/html
-< Content-Length: 164
-< Connection: keep-alive
-< Location: https://vk.com/
-< X-Frontend: front609304
-< Access-Control-Expose-Headers: X-Frontend
-< 
-<html>
-<head><title>301 Moved Permanently</title></head>
-<body>
-<center><h1>301 Moved Permanently</h1></center>
-<hr><center>kittenx</center>
-</body>
-</html>
-* Connection #0 to host localhost left intact
+test_directory_index (__main__.HttpServer)
+directory index file exists ... ok
+test_document_root_escaping (__main__.HttpServer)
+document root escaping forbidden ... ok
+test_empty_request (__main__.HttpServer)
+Send empty line ... ok
+test_file_in_nested_folders (__main__.HttpServer)
+file located in nested folders ... ok
+test_file_not_found (__main__.HttpServer)
+absent file returns 404 ... ok
+test_file_type_css (__main__.HttpServer)
+Content-Type for .css ... ok
+test_file_type_gif (__main__.HttpServer)
+Content-Type for .gif ... ok
+test_file_type_html (__main__.HttpServer)
+Content-Type for .html ... ok
+test_file_type_jpeg (__main__.HttpServer)
+Content-Type for .jpeg ... ok
+test_file_type_jpg (__main__.HttpServer)
+Content-Type for .jpg ... ok
+test_file_type_js (__main__.HttpServer)
+Content-Type for .js ... ok
+test_file_type_png (__main__.HttpServer)
+Content-Type for .png ... ok
+test_file_type_swf (__main__.HttpServer)
+Content-Type for .swf ... ok
+test_file_urlencoded (__main__.HttpServer)
+urlencoded filename ... ok
+test_file_with_dot_in_name (__main__.HttpServer)
+file with two dots in name ... ok
+test_file_with_query_string (__main__.HttpServer)
+query string with get params ... ok
+test_file_with_slash_after_filename (__main__.HttpServer)
+slash after filename ... ok
+test_file_with_spaces (__main__.HttpServer)
+filename with spaces ... ok
+test_head_method (__main__.HttpServer)
+head method support ... ok
+test_index_not_found (__main__.HttpServer)
+directory index file absent ... ok
+test_large_file (__main__.HttpServer)
+large file downloaded correctly ... ok
+test_post_method (__main__.HttpServer)
+post method forbidden ... ok
+test_request_without_two_newlines (__main__.HttpServer)
+Send GET without to newlines ... ok
+test_server_header (__main__.HttpServer)
+Server header exists ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 6.769s
+
+OK
 ```
 
-Выполняем **https** запрос с помощью `curl` через прокси.
+### Нагрузочное тестирование тестирование
+
+Нагрузочное тестирования **nginx**
 ```text
-curl -vvv https://vk.com -x http://localhost:8081     
+wrk -t12 -c400 -d30s 'http://127.0.0.1:8080/httptest/splash.css'   
 ```
-Ответ:
+Результат:
 ```bash
-*   Trying 127.0.0.1:8081...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 8081 (#0)
-* allocate connect buffer!
-* Establish HTTP proxy tunnel to vk.com:443
-> CONNECT vk.com:443 HTTP/1.1
-> Host: vk.com:443
-> User-Agent: curl/7.68.0
-> Proxy-Connection: Keep-Alive
-> 
-< HTTP/1.0 200 Connection established
-< 
-* Proxy replied 200 to CONNECT request
-* CONNECT phase completed!
-* ALPN, offering h2
-* ALPN, offering http/1.1
-* successfully set certificate verify locations:
-*   CAfile: /etc/ssl/certs/ca-certificates.crt
-  CApath: /etc/ssl/certs
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-* CONNECT phase completed!
-* CONNECT phase completed!
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
-* TLSv1.3 (IN), TLS handshake, Certificate (11):
-* TLSv1.3 (IN), TLS handshake, CERT verify (15):
-* TLSv1.3 (IN), TLS handshake, Finished (20):
-* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
-* TLSv1.3 (OUT), TLS handshake, Finished (20):
-* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
-* ALPN, server did not agree to a protocol
-* Server certificate:
-*  subject: CN=vk.com
-*  start date: Feb 27 14:55:44 2022 GMT
-*  expire date: Feb 25 14:55:44 2032 GMT
-*  common name: vk.com (matched)
-*  issuer: CN=thecompiler proxy CA
-*  SSL certificate verify ok.
-> GET / HTTP/1.1
-> Host: vk.com
-> User-Agent: curl/7.68.0
-> Accept: */*
-> 
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* old SSL session ID is stale, removing
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 302 Found
-< Server: kittenx
-< Date: Sun, 27 Feb 2022 15:41:29 GMT
-< Content-Type: text/html; charset=windows-1251
-< Content-Length: 0
-< Connection: keep-alive
-< X-Powered-By: KPHP/7.4.110260
-< Set-Cookie: remixir=DELETED; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; domain=.vk.com; secure; HttpOnly
-< Set-Cookie: remixlang=0; expires=Wed, 01 Mar 2023 23:25:13 GMT; path=/; domain=.vk.com
-< Location: https://m.vk.com/
-< X-Frontend: front224207
-< Strict-Transport-Security: max-age=15768000
-< Access-Control-Expose-Headers: X-Frontend
-< alt-svc: h3=":443"; ma=86400,h3-29=":443"; ma=86400
-< 
-* Connection #0 to host localhost left intact
+Running 30s test @ http://127.0.0.1:8080/httptest/splash.css
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   176.15ms  208.81ms 894.45ms   79.78%
+    Req/Sec   788.80    772.75     5.23k    74.77%
+  139813 requests in 30.09s, 41.07MB read
+  Non-2xx or 3xx responses: 139813
+Requests/sec:   4647.03
+Transfer/sec:      1.36MB
 ```
 
-## Возможные ошибки
-* `400` Если будет передан не известный протокол.
-<br>**Ответ от proxy-server:**
-```bash
-HTTP/1.1 400 Bad request
-Empty message from client
+Нагрузочное тестирования сервера
+```text
+wrk -t12 -c400 -d30s 'http://127.0.0.1:8081/httptest/splash.css'   
 ```
-
-* `404` Если будет передан не известный протокол.
+Результат:
 ```bash
-curl -vvv https://vk.com -x http://localhost:8081
+Running 30s test @ http://127.0.0.1:8081/httptest/splash.css
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   274.03ms   28.16ms 477.30ms   94.50%
+    Req/Sec   120.25     68.92   323.00     61.78%
+  43246 requests in 30.09s, 3.79MB read
+  Non-2xx or 3xx responses: 43246
+Requests/sec:   1437.41
+Transfer/sec:    129.14KB
 
-*   Trying 127.0.0.1:8081...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 8081 (#0)
-* allocate connect buffer!
-* Establish HTTP proxy tunnel to vk.com:443
-> CONNECT vk.com:443 HTTP/1.1
-> Host: vk.com:443
-> User-Agent: curl/7.68.0
-> Proxy-Connection: Keep-Alive
->
-< HTTP/1.1 404 Not found
-<  Unknown protocol T
-<
-* Received HTTP code 404 from proxy after CONNECT
-* CONNECT phase completed!
-* Closing connection 0
-  curl: (56) Received HTTP code 404 from proxy after CONNECT
 ```
-* `408` Если хост слишком долго не отвечает
-  <br>**Ответ от proxy-server:**
-```bash
-HTTP/1.1 408 Request Timeout  
- 2s time out 
-```
-* `503` Если не получилось создать соединение с хостом
-```bash
-curl -vvv http://vk.com:20 -x http://localhost:8081     
-
-*   Trying 127.0.0.1:8081...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 8081 (#0)
-> GET http://vk.com:20/ HTTP/1.1
-> Host: vk.com:20
-> User-Agent: curl/7.68.0
-> Accept: */*
-> Proxy-Connection: Keep-Alive
-> 
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 503 Service Unavailable 
-<  Can't connect to host 
-* no chunk, no close, no size. Assume close to signal end
-< 
-* Closing connection 0
-```
-* `523` Если не получилось получить информацию о домене
-```bash
-curl -vvv http://vk.cor -x http://localhost:8081 
-
-*   Trying 127.0.0.1:8081...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 8081 (#0)
-> GET http://vk.cor/ HTTP/1.1
-> Host: vk.cor
-> User-Agent: curl/7.68.0
-> Accept: */*
-> Proxy-Connection: Keep-Alive
-> 
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 523 Origin Is Unreachable 
-<  Can't resolve hostname vk.cor
-* no chunk, no close, no size. Assume close to signal end
-< 
-* Closing connection 0
-```
-* `525` Если не получилось установить ssl соединение
-  <br>**Ответ от proxy-server:**
-```bash
-HTTP/1.1 525 SSL Handshake Failed
-Can't connect to client by tls 
-```
-
-

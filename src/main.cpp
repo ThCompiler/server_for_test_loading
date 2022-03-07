@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
                              std::cout << "Client " << getHostStr(client) << " disconnected\n";
                          },
 
-                         std::thread::hardware_concurrency() // Thread pool size
+                         40//std::thread::hardware_concurrency() // Thread pool size
         );
 
         //Start server

@@ -55,6 +55,8 @@ class Epoll {
 
     bool delete_client(const std::shared_ptr<IServerClient>& client);
 
+    bool delete_client(socket_t socket);
+
     std::vector<Client> get_clients();
 
     void delete_all();

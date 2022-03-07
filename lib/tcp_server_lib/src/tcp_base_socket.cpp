@@ -124,7 +124,7 @@ bool BaseSocket::send_to(const void *buffer, int size) const {
         return false;
     }
 
-    if (send(_socket, reinterpret_cast<const char *>(buffer), size, 0) < 0) {
+    if (send(_socket, reinterpret_cast<const char *>(buffer), size, MSG_NOSIGNAL) < 0) {
         return false;
     }
 

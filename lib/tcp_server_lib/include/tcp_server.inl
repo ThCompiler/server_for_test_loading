@@ -91,7 +91,7 @@ void TcpServer<Socket, T>::joinLoop() {
 
 SOCKET_TEMPLATE
 bool TcpServer<Socket, T>::connect_to(uint32_t host, uint16_t port,
-                                      const _con_handler_function_t &connect_hndl) {
+                                      const _con_handler_function_t &) {
     uniq_ptr<Socket> client_socket;
     auto sts = client_socket->init(host, port,
                                   (uint16_t) SocketType::nonblocking_socket
@@ -105,7 +105,7 @@ bool TcpServer<Socket, T>::connect_to(uint32_t host, uint16_t port,
         return false;
     }
 
-    connect_hndl(client_socket);
+   // connect_hndl(client_socket);
     _epoll.add_client(uniq_ptr<T>(std::move(client_socket)));
     return true;
 }
@@ -140,14 +140,11 @@ void TcpServer<Socket, T>::_waiting_recv_loop() {
                 _epoll.delete_client(client.get_client());
                 _thread_pool.add([this, client] {
                     client.lock();
-                    _disconnect_hndl(
-                            reinterpret_cast<const std::unique_ptr<IServerClient> &>(client.get_client()));
                     client.get_client()->disconnect();
                     client.unlock();
                 });
                 break;
             case Epoll::need_accept:
-                printf("d");
                 _thread_pool.add([this] {
                     _accept_loop(_epoll.get_server());
                 });
@@ -162,6 +159,8 @@ void TcpServer<Socket, T>::_waiting_recv_loop() {
                             SocketStatus::disconnected) {
                             client.get_client()->handle_request();
                         }
+                        _epoll.delete_client(client.get_client());
+                        client.get_client()->disconnect();
                         client.unlock();
                     });
                 break;
