@@ -132,7 +132,9 @@ std::string FileClient::_parse_request(std::string &data) {
         return response;
     }
 
-    auto content_type = Filesystem::encode_file_type(res.path.extension());
+    auto file_ex = res.path.extension().string();
+    std::transform(file_ex.begin(), file_ex.end(), file_ex.begin(), tolower);
+    auto content_type = Filesystem::encode_file_type(file_ex);
     if (content_type.empty()) {
         response += (std::string)STATUS_FORBIDDEN + divider + headers + divider;
         return response;
