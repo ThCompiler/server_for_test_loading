@@ -6,6 +6,7 @@
 
 using namespace bstcp;
 
+
 //Parse ip to std::string
 std::string getHostStr(const std::unique_ptr<IServerClient> &client) {
     uint32_t ip = client->get_host();
@@ -15,8 +16,6 @@ std::string getHostStr(const std::unique_ptr<IServerClient> &client) {
            std::to_string(int(reinterpret_cast<unsigned char *>(&ip)[3])) + ':' +
            std::to_string(client->get_port());
 }
-
-
 
 int main(int argc, char *argv[]) {
     int opt = 0;
@@ -40,13 +39,13 @@ int main(int argc, char *argv[]) {
                              std::cout << "Client " << getHostStr(client) << " disconnected\n";
                          },
 
-                         40//std::thread::hardware_concurrency() // Thread pool size
+                         number_events//std::thread::hardware_concurrency() // Thread pool size
         );
 
         //Start server
         if (server.start() == BaseTcpServer<file::FileClient>::ServerStatus::up) {
             std::cout << "Server listen on port: " << server.get_port() << std::endl
-                      << "Server handling thread pool size: " << server.get_thread_pool().get_count_threads() << std::endl;
+                      << "Server run on events: " << number_events << std::endl;
             server.joinLoop();
             return EXIT_SUCCESS;
         } else {

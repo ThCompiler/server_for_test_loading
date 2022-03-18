@@ -34,6 +34,21 @@ class Parallel {
         }
     }
 
+    template<typename Callable>
+    void add_multi(const std::vector<Callable>& f) {
+        std::lock_guard<std::mutex> lck(_task_mutex);
+
+        if (_exit) {
+            return;
+        }
+
+        for (auto & task : f) {
+            _tasks.push(std::move(task));
+        }
+
+        _wait.notify_one();;
+    }
+
     void join();
 
     void stop();

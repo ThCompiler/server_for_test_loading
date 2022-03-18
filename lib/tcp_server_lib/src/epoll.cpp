@@ -5,8 +5,7 @@
 
 namespace bstcp {
 
-const size_t max_events = 50;
-const size_t timeout    = 1000;
+const size_t timeout    = 10000;
 
 Epoll::Epoll()
     : _epoll_fd(epoll_create1(0)) {}
@@ -48,9 +47,9 @@ std::vector<Epoll::epoll_event_t> Epoll::wait() {
         return {};
     }
 
-    std::vector<struct epoll_event> events(max_events);
+    std::vector<struct epoll_event> events(number_events);
     std::lock_guard lock(_mutex);
-    auto number = epoll_wait(_epoll_fd, events.data(), max_events, timeout);
+    auto number = epoll_wait(_epoll_fd, events.data(), number_events, timeout);
     std::vector<epoll_event_t> selected;
 
     for (int i = 0; i < number; ++i) {

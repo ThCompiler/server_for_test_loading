@@ -22,7 +22,7 @@ ENV USE_PORT=$PORT
 
 EXPOSE $PORT
 
-COPY /httptest /httptest
+COPY /httptest ./httptest
 
 COPY --from=build /app/build/httpd .
 

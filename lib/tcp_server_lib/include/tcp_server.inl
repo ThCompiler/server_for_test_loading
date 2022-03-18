@@ -132,25 +132,26 @@ void TcpServer<Socket, T>::_accept_loop(const std::unique_ptr<ISocket>& server) 
 SOCKET_TEMPLATE
 void TcpServer<Socket, T>::_waiting_recv_loop() {
     auto res = _epoll.wait();
+    std::vector<std::function<void(void)>> added_task;
     for (const auto& event : res) {
         auto& client = event.client;
         switch (event.event) {
             case Epoll::err:
             case Epoll::event_t::close:
                 _epoll.delete_client(client.get_client());
-                _thread_pool.add([this, client] {
+                added_task.push_back([this, client] {
                     client.lock();
                     client.get_client()->disconnect();
                     client.unlock();
                 });
                 break;
             case Epoll::need_accept:
-                _thread_pool.add([this] {
+                added_task.push_back([this] {
                     _accept_loop(_epoll.get_server());
                 });
                 break;
             case Epoll::can_read:
-                _thread_pool.add(
+                added_task.push_back(
                     [this, client] {
                         if (!client.try_lock()) {
                             return;
@@ -165,6 +166,10 @@ void TcpServer<Socket, T>::_waiting_recv_loop() {
                     });
                 break;
         }
+    }
+
+    if (!added_task.empty()) {
+        _thread_pool.add_multi(added_task);
     }
 
     if (_status == ServerStatus::up) {

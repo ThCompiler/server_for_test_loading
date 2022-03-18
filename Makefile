@@ -3,6 +3,8 @@ CONTAINER = server
 PORT = 8081
 NGINX_PORT = 8080
 
+CORE_NUMBER = 6
+
 build:
 	mkdir build
 	cd build && cmake ..
@@ -29,7 +31,7 @@ build-docker:
 	docker build --no-cache . --tag $(PROJECT) --build-arg PORT=$(PORT)
 
 docker-run:
-	docker run -p $(PORT):$(PORT) --name $(CONTAINER) -t $(PROJECT)
+	docker run -it --cpus="$(CORE_NUMBER)" -p $(PORT):$(PORT) --name $(CONTAINER) -t $(PROJECT)
 
 docker-stop:
 	docker stop $(CONTAINER)

@@ -4,6 +4,8 @@
 
 #include "concepts.hpp"
 
+const size_t number_events = 20;
+
 namespace bstcp {
 
 typedef int epoll_fd_t;
