@@ -19,6 +19,16 @@ class Parallel {
             f(args...);
         } else {
             {
+                std::lock_guard<std::mutex> thr_lck(_thread_mutex);
+                if (_threads.size() < _max_threads) {
+                    _threads.emplace_back(new Thread([f, args...] {
+                        f(args...);
+                    }, _wait));
+                    return;
+                }
+            }
+
+            {
                 std::lock_guard<std::mutex> lck(_task_mutex);
 
                 if (_exit) {
@@ -36,14 +46,26 @@ class Parallel {
 
     template<typename Callable>
     void add_multi(const std::vector<Callable>& f) {
+        size_t i = 0;
+        {
+            std::lock_guard<std::mutex> thr_lck(_thread_mutex);
+            while (i < f.size() && _threads.size() < _max_threads) {
+                _threads.emplace_back(new Thread(f[i], _wait));
+                ++i;
+            }
+        }
+        if (i >= f.size()) {
+            return;
+        }
+
         std::lock_guard<std::mutex> lck(_task_mutex);
 
         if (_exit) {
             return;
         }
 
-        for (auto & task : f) {
-            _tasks.push(std::move(task));
+        for (; i < f.size(); ++i) {
+            _tasks.push(std::move(f[i]));
         }
 
         _wait.notify_one();;
@@ -91,6 +113,7 @@ class Parallel {
     bool                                    _exit = false;
     size_t                                  _max_threads;
     std::mutex                              _task_mutex;
+    std::mutex                              _thread_mutex;
     std::condition_variable                 _wait;
     std::list<std::unique_ptr<Thread>>      _threads;
     std::queue<std::function<void(void)>>   _tasks;

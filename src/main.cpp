@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
                              std::cout << "Client " << getHostStr(client) << " disconnected\n";
                          },
 
-                         number_events//std::thread::hardware_concurrency() // Thread pool size
+                         5//std::thread::hardware_concurrency() // Thread pool size
         );
 
         //Start server

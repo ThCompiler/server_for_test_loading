@@ -146,9 +146,7 @@ void TcpServer<Socket, T>::_waiting_recv_loop() {
                 });
                 break;
             case Epoll::need_accept:
-                added_task.push_back([this] {
-                    _accept_loop(_epoll.get_server());
-                });
+                _accept_loop(_epoll.get_server());
                 break;
             case Epoll::can_read:
                 added_task.push_back(
@@ -168,14 +166,15 @@ void TcpServer<Socket, T>::_waiting_recv_loop() {
         }
     }
 
-    if (!added_task.empty()) {
-        _thread_pool.add_multi(added_task);
-    }
 
     if (_status == ServerStatus::up) {
-        _thread_pool.add([this]() {
+        added_task.push_back([this]() {
             _waiting_recv_loop();
         });
+    }
+
+    if (!added_task.empty()) {
+        _thread_pool.add_multi(added_task);
     }
 }
 

@@ -57,24 +57,21 @@ void Parallel::_supervisor() {
     while (true) {
         std::unique_lock<std::mutex> lck(_task_mutex);
 
-        bool end = false;
-        _wait.wait(lck, [this, &end] {
-            for(auto & thread : _threads) {
-                if ((end = thread->is_finished())) {
-                    break;
-                }
+        _wait.wait(lck, [this] {
+            {
+                std::lock_guard<std::mutex> thr_lck(_thread_mutex);
+                _threads.remove_if([](const auto &thread) {
+                    return thread->is_finished();
+                });
             }
-            return _exit || (!_tasks.empty() && _threads.size() < (size_t) _max_threads) || end;
+            return _exit || (!_tasks.empty() && _threads.size() < (size_t) _max_threads);
         });
 
         if (_exit) {
             break;
         }
 
-        _threads.remove_if([](const auto& thread){
-            return thread->is_finished();
-        });
-        
+        std::lock_guard<std::mutex> thr_lck(_thread_mutex);
         while (!_tasks.empty() && _threads.size() < (size_t) _max_threads) {
             _threads.emplace_back(new Thread(_tasks.front(), _wait));
             _tasks.pop();

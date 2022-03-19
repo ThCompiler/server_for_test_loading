@@ -5,7 +5,7 @@
 
 namespace bstcp {
 
-const size_t timeout    = 10000;
+const size_t timeout    = 1000;
 
 Epoll::Epoll()
     : _epoll_fd(epoll_create1(0)) {}
@@ -18,18 +18,6 @@ bool Epoll::delete_client(const std::shared_ptr<IServerClient>& client) {
     std::lock_guard lock(_mutex);
     _clients.erase(socket_fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, client->get_socket(), nullptr) == -1) {
-        return false;
-    }
-    return true;
-}
-
-bool Epoll::delete_client(socket_t socket) {
-    if (_clients.find(socket) == _clients.end()) {
-        return false;
-    }
-    std::lock_guard lock(_mutex);
-    _clients.erase(socket);
-    if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, socket, nullptr) == -1) {
         return false;
     }
     return true;
@@ -48,18 +36,17 @@ std::vector<Epoll::epoll_event_t> Epoll::wait() {
     }
 
     std::vector<struct epoll_event> events(number_events);
-    std::lock_guard lock(_mutex);
+
     auto number = epoll_wait(_epoll_fd, events.data(), number_events, timeout);
     std::vector<epoll_event_t> selected;
 
+    std::lock_guard lock(_mutex);
     for (int i = 0; i < number; ++i) {
         epoll_event_t epollEvent;
 
         if (events[i].data.fd != _serv_socket->get_socket()
         && _clients.find(events[i].data.fd) == _clients.end()) {
-            if (!_delete_ctl(events[i].data.fd)) {
-                throw std::runtime_error("Some strange");
-            }
+            _delete_ctl(events[i].data.fd);
             continue;
         }
 
