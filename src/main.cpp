@@ -39,13 +39,13 @@ int main(int argc, char *argv[]) {
                              std::cout << "Client " << getHostStr(client) << " disconnected\n";
                          },
 
-                         5//std::thread::hardware_concurrency() // Thread pool size
+                         20//std::thread::hardware_concurrency() // Thread pool size
         );
 
         //Start server
         if (server.start() == BaseTcpServer<file::FileClient>::ServerStatus::up) {
             std::cout << "Server listen on port: " << server.get_port() << std::endl
-                      << "Server run on events: " << number_events << std::endl;
+                      << "Server run on events: " << 20 << std::endl;
             server.joinLoop();
             return EXIT_SUCCESS;
         } else {

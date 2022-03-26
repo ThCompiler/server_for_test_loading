@@ -1,5 +1,6 @@
 #include <sys/epoll.h>
 #include <exception>
+#include <iostream>
 
 #include "epoll.hpp"
 
@@ -12,10 +13,10 @@ Epoll::Epoll()
 
 bool Epoll::delete_client(const std::shared_ptr<IServerClient>& client) {
     auto socket_fd = client->get_socket();
+    std::lock_guard lock(_mutex);
     if (_clients.find(socket_fd) == _clients.end()) {
         return false;
     }
-    std::lock_guard lock(_mutex);
     _clients.erase(socket_fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, client->get_socket(), nullptr) == -1) {
         return false;
@@ -76,12 +77,13 @@ bool Epoll::add_client(std::unique_ptr<IServerClient>&& client) {
     auto socket_fd = client->get_socket();
     ev.data.fd = socket_fd;
     ev.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
+
+    if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, client->get_socket(), &ev) ==
+        -1) {
+        return false;
+    }
     {
         std::lock_guard lock(_mutex);
-        if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, client->get_socket(), &ev) ==
-            -1) {
-            return false;
-        }
         _clients[socket_fd] = Client(
                 std::shared_ptr<IServerClient>(client.release()));
     }

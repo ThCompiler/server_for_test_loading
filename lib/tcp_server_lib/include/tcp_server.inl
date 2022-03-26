@@ -123,7 +123,7 @@ void TcpServer<Socket, T>::_accept_loop(const std::unique_ptr<ISocket>& server) 
 
         if (_enable_keep_alive(client_socket.get_socket())) {
             uniq_ptr<IServerClient> client(new T(std::move(client_socket)));
-            _connect_hndl(client);
+            //_connect_hndl(client);
             _epoll.add_client(std::move(client));
         }
     }

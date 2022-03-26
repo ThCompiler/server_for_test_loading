@@ -3,7 +3,7 @@ CONTAINER = server
 PORT = 8081
 NGINX_PORT = 8080
 
-CORE_NUMBER = 6
+CORE_NUMBER = 2
 
 build:
 	mkdir build
@@ -19,13 +19,13 @@ run-func-test:
 	python3 ./httptest.py
 
 build-docker-nginx:
-	docker build -t nginx -f nginx.Dockerfile .
+	docker build -t nginx-local -f nginx.Dockerfile .
 
 docker-run-nginx:
-	docker run -p $(NGINX_PORT):$(NGINX_PORT) --name nginx -t nginx
+	docker run -p $(NGINX_PORT):$(NGINX_PORT) --name nginx-local -t nginx-local
 
 docker-stop-nginx:
-	docker stop nginx
+	docker stop nginx-local
 
 build-docker:
 	docker build --no-cache . --tag $(PROJECT) --build-arg PORT=$(PORT)
@@ -37,4 +37,4 @@ docker-stop:
 	docker stop $(CONTAINER)
 
 docker-free:
-	docker rm -vf $(CONTAINER) || true
+	docker rm -fv $$(docker ps -aq) || true
